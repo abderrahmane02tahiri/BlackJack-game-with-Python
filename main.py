@@ -1,11 +1,14 @@
 import random
-from art import logo
-from typing import List, Any
+import os
+from art import draw_blackjack_logo
 
-cards: list[int | Any] = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+def clear():
+    os.system('cls')  # for Windows
+
 user_hand = []
 computer_hand = []
 
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
 def deal_cards(cards):
     user_hand.extend(random.sample(cards, 2))
@@ -37,3 +40,40 @@ def compare(user_hand, computer_hand):
         return "YOU WIN"
     else:
         return "YOU LOSE"
+
+
+def play_game() :
+    draw_blackjack_logo()
+    is_game_over = False
+
+    deal_cards(cards)
+
+    while not is_game_over :
+        user_score = score_calculator(user_hand)
+        computer_score = score_calculator(computer_hand)
+
+        print(f"Your cards :{user_hand} current score is {user_score} :")
+        print(f"Opponent first card is : {computer_hand[0]}")
+
+        if user_score == 0 or computer_score== 0 or user_score > 21 :
+            is_game_over = True
+        else :
+            user_should_deal=input("type y : to get another card , type n : to pass : ")
+            if user_should_deal == "y" :
+                user_hand.append(random.choice(cards))
+            else :
+                is_game_over= True
+    while computer_score != 0 and computer_score <17 :
+        computer_hand.append(random.choice(cards))
+        computer_score=score_calculator(computer_hand)
+
+    print(f"Your final hand : {user_hand} , and your final score is : {user_score} ")
+    print(f"Computer final hand is : {computer_hand} with the final score of : {computer_score}")
+    print(compare(user_hand , computer_hand))
+
+
+while input("Do you want to play a game of BlackJack? Type 'y' to play and 'n' to quite : ") == "y" :
+    clear()
+    play_game()
+
+
